@@ -14,7 +14,7 @@ namespace ADC
 
 		virtual ~Monster() {}
 
-		virtual bool movePossible(World::Cell cell, bool& consummed);
+		virtual bool movePossible(const World::Position& pos, World::Cell cell, bool& consummed);
 
 		bool update();
 

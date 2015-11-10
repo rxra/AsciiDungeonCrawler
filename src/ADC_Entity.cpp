@@ -33,7 +33,7 @@ namespace ADC
 	bool Entity::move(const World::Position& newPosition)
 	{
 		bool consummed = false;
-		if (!_world->isCellFree(newPosition) || !movePossible(_world->getCell(newPosition),consummed))
+		if (!_world->isCellFree(newPosition) || !movePossible(newPosition, _world->getCell(newPosition), consummed))
 		{
 			return false;
 		}

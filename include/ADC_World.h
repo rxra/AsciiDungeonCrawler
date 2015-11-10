@@ -125,6 +125,8 @@ namespace ADC
 		/** Returns the player (which is unique). */
 		std::shared_ptr<Player>& getPlayer();
 
+		void removeMonsterByPosition(const Position& position);
+
 	private:
 
 		////////////////////////////////////////////////////////////////////////////////

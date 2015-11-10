@@ -80,7 +80,7 @@ namespace ADC
 	{
 		vector<shared_ptr<Monster>> monstersToRemove;
 
-		for (auto m : _monsters)
+		/*for (auto m : _monsters)
 		{
 			if (!m->update())
 			{
@@ -91,7 +91,7 @@ namespace ADC
 		for (auto m : monstersToRemove)
 		{
 			_monsters.remove(m);
-		}
+		}*/
 	}
 
 	void World::entityEnterCell(Entity& entity)
@@ -120,6 +120,13 @@ namespace ADC
 		}
 
 		return _map[x + y * _width] != Cell::ConcreteWall;
+	}
+
+	void World::removeMonsterByPosition(const Position& position)
+	{
+		_monsters.remove_if([&position](const shared_ptr<Monster>& m) {
+			return m->getPosition() == position;
+		});
 	}
 
 	bool World::_load(const string& filename, std::vector<Position>& monsterPositions)

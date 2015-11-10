@@ -11,7 +11,7 @@ extern mt19937 g_TheGameRNG;
 namespace ADC
 {
 
-	bool Monster::movePossible(World::Cell cell, bool& consummed)
+	bool Monster::movePossible(const World::Position& pos, World::Cell cell, bool& consummed)
 	{
 		consummed = false;
 

@@ -39,7 +39,7 @@ namespace ADC
 		_previousWorldCell = World::Cell::FreeCell;
 	}
 
-	bool Player::movePossible(World::Cell cell, bool& consummed)
+	bool Player::movePossible(const World::Position& pos, World::Cell cell, bool& consummed)
 	{
 		consummed = false;
 
@@ -57,6 +57,10 @@ namespace ADC
 
 		case World::Cell::NaughtyMonster:
 			hittedByMonster(consummed);
+			if (consummed)
+			{
+				_world->removeMonsterByPosition(pos);
+			}
 			return consummed;
 
 		case World::Cell::Trap:

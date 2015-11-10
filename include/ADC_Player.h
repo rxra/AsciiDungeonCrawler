@@ -14,7 +14,7 @@ namespace ADC
 
 		virtual ~Player() {}
 
-		virtual bool movePossible(World::Cell cell, bool &consummed);
+		virtual bool movePossible(const World::Position& pos, World::Cell cell, bool &consummed);
 
 		void reset(int lives);
 

@@ -26,7 +26,7 @@ namespace ADC
 		bool moveLeft();
 		bool moveRight();
 
-		virtual bool movePossible(World::Cell cell, bool& consummed) = 0;
+		virtual bool movePossible(const World::Position& pos, World::Cell cell, bool& consummed) = 0;
 
 
 	protected:
