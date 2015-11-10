@@ -29,6 +29,8 @@ namespace ADC
 
 		virtual void render() = 0;
 
+		virtual void updateReference() = 0;
+
 		virtual void updateGUI(const Player& player) = 0;
 
 		virtual void playerDead() = 0;

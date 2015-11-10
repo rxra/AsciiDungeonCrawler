@@ -1,12 +1,9 @@
 
 #include "ADC_Monster.h"
 #include "ADC_Player.h"
-#include <Windows.h>
-#include <random>
+#include "ADC_RandomGenerator.h"
 
 using namespace std;
-
-extern mt19937 g_TheGameRNG;
 
 namespace ADC
 {
@@ -87,29 +84,23 @@ namespace ADC
 
 	void Monster::_randomMove()
 	{
-		bool moved = false;
-		uniform_int_distribution<uint32_t> dist4(0, 3);
-		switch (dist4(g_TheGameRNG)) {
-		case 0:
-			moved = moveUp();
+		switch (RandomGenerator::RandomDirection()) {
+		case World::Direction::Up:
+			moveUp();
 			break;
-		case 1:
-			moved = moveDown();
+
+		case World::Direction::Down:
+			moveDown();
 			break;
-		case 2:
-			moved = moveLeft();
+
+		case World::Direction::Left:
+			moveLeft();
 			break;
-		case 3:
-			moved = moveRight();
+
+		case World::Direction::Right:
+			moveRight();
 			break;
 		}
-
-		if (moved)
-		{
-			return;
-		}
-
-		OutputDebugString("move failed\n");
 	}
 
 }

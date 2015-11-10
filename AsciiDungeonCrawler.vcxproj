@@ -14,6 +14,7 @@
     <ClCompile Include="src\ADC_Entity.cpp" />
     <ClCompile Include="src\ADC_Monster.cpp" />
     <ClCompile Include="src\ADC_Player.cpp" />
+    <ClCompile Include="src\ADC_RandomGenerator.cpp" />
     <ClCompile Include="src\ADC_RendererConsole.cpp" />
     <ClCompile Include="src\ADC_World.cpp" />
     <ClCompile Include="src\AsciiDungeonCrawler.cpp" />
@@ -24,6 +25,7 @@
     <ClInclude Include="include\ADC_Entity.h" />
     <ClInclude Include="include\ADC_Monster.h" />
     <ClInclude Include="include\ADC_Player.h" />
+    <ClInclude Include="include\ADC_RandomGenerator.h" />
     <ClInclude Include="include\ADC_Renderer.h" />
     <ClInclude Include="include\ADC_World.h" />
     <ClInclude Include="src\ADC_RendererConsole.h" />

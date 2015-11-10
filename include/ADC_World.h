@@ -46,6 +46,14 @@ namespace ADC
 			FreeCell = ' '
 		};
 
+		enum class Direction
+		{
+			Up,
+			Right,
+			Down,
+			Left
+		};
+
 		/**
 		  * Describe a position in the maze.
 		  * 0x0 is the top left corner of the maze. And (width-1)x(height-1) is the bottom right corner of the maze.
@@ -125,6 +133,8 @@ namespace ADC
 		/** Returns the player (which is unique). */
 		std::shared_ptr<Player>& getPlayer();
 
+		void spawnMonster();
+
 		void removeMonsterByPosition(const Position& position);
 
 	private:
@@ -148,6 +158,7 @@ namespace ADC
 		std::shared_ptr<Player> _player;
 		std::vector<Cell> _map;
 		std::list<std::shared_ptr<Monster>> _monsters;
+		std::shared_ptr<World> _SharedThis;
 
 	};
 

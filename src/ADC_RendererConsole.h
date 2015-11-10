@@ -25,12 +25,15 @@ namespace ADC
 		void render();
 		void updateGUI(const Player& player);
 		void playerDead();
+		void updateReference();
 
 	private:
 
 		void _updateFromWorld();
 
 		const std::shared_ptr<World>& _world;
+		size_t _referenceX;
+		size_t _referenceY;
 		size_t _width;
 		size_t _height;
 		HANDLE _outputHandle;

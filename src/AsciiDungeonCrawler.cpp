@@ -3,26 +3,26 @@
 
 #include <windows.h>
 #include <iostream>
-#include <random>
 #include <ctime>
 
 #include "ADC_World.h"
 #include "ADC_Renderer.h"
 #include "ADC_Player.h"
+#include "ADC_RandomGenerator.h"
 
 using namespace std;
 
-#define GAME_FPS ((float)( 10 ))
-float GAME_FREQUENCY = 1.0f / GAME_FPS; // Used to limit FPS
-LARGE_INTEGER FREQUENCY;
+const float kGameFPS = 10.f;
+float kGameFrequency = 1.0f / kGameFPS;
+LARGE_INTEGER frequency;
+const float kMonstersSpawnFrequency = 10;
 
-mt19937 g_TheGameRNG;
 
 float GetCurrentGameTime(void)
 {
 	LARGE_INTEGER currentTime;
 	QueryPerformanceCounter(&currentTime);
-	return (float)(currentTime.QuadPart) / (float)(FREQUENCY.QuadPart);
+	return (float)(currentTime.QuadPart) / (float)(frequency.QuadPart);
 }
 
 BOOL FPSLimit(float frameTime)
@@ -33,7 +33,7 @@ BOOL FPSLimit(float frameTime)
 		DRAW
 	};
 
-	if (GetCurrentGameTime() - frameTime < GAME_FREQUENCY) // If we are not over our threshold
+	if (GetCurrentGameTime() - frameTime < kGameFrequency) // If we are not over our threshold
 	{
 		return DONTDRAW;
 	}
@@ -45,10 +45,8 @@ BOOL FPSLimit(float frameTime)
 
 int main(int argc, const char** argv)
 {
-	g_TheGameRNG.seed(static_cast<unsigned long>(time(0)));
-
-	GAME_FREQUENCY = (float)((int)(GAME_FREQUENCY * 1000.0f)) / 1000.0f;
-	QueryPerformanceFrequency(&FREQUENCY);
+	kGameFrequency = (float)((int)(kGameFrequency * 1000.0f)) / 1000.0f;
+	QueryPerformanceFrequency(&frequency);
 
 	string map("test1.map");
 
@@ -63,9 +61,11 @@ int main(int argc, const char** argv)
 		exit(1);
 	}
 
+	ADC::RandomGenerator::Initialize();
+
 	// and then the renderer (responsible to display the game
 	// and manage inputs).
-	auto renderer = ADC::Renderer::CreateRendererConsole(world);
+	auto renderer = ADC::Renderer::CreateRendererConsole(world,64,64);
 	if (renderer==nullptr)
 	{
 		cerr << "Failed to initialize renderer!" << endl;
@@ -108,27 +108,36 @@ int main(int argc, const char** argv)
 
 	/////////////////////////////////////////////////////////////////////////////
 
-	bool input = false;
+	float lastMonstersSpawntime = GetCurrentGameTime();
+
 	while (loop)
 	{
 		float frameTime = GetCurrentGameTime();
 
-		input = renderer->updateInput();
+		 renderer->updateInput();
 
 		while (!FPSLimit(frameTime));
 
 		world->update();
+		if ((GetCurrentGameTime() - lastMonstersSpawntime) >= kMonstersSpawnFrequency)
+		{
+			lastMonstersSpawntime = GetCurrentGameTime();
+			world->spawnMonster();
+		}
 
 		if (world->getPlayer()->hasBeenUpdated(true))
 		{
+			renderer->updateReference();
 			renderer->updateGUI(*world->getPlayer());
 			if (world->getPlayer()->getLives() == 0)
 			{
 				renderer->playerDead();
 			}
+			renderer->render();
 		}
-		if (input || world->hasBeenUpdated(false))
+		else if (world->hasBeenUpdated(false))
 		{
+			renderer->updateReference();
 			renderer->render();
 		} 
 	}

@@ -2,6 +2,7 @@
 #include "ADC_World.h"
 #include "ADC_Player.h"
 #include "ADC_Monster.h"
+#include "ADC_RandomGenerator.h"
 #include <iostream>
 #include <fstream>
 
@@ -42,6 +43,8 @@ namespace ADC
 
 		// if the world has been loaded
 
+		world->_SharedThis = world;
+
 		// create the player
 		// using the start cell
 		world->_player = make_shared<Player>(world, world->_startCell, playerLives);
@@ -70,7 +73,12 @@ namespace ADC
 
 		vector<Position> monstersPositions;
 		_load(filename,monstersPositions);
-		
+
+		for (auto mp : monstersPositions)
+		{
+			_monsters.push_back(make_shared<Monster>(_SharedThis, mp, 5));
+		}
+
 		_player->reset(playerLives);
 
 		_hasBeenUpdated = true;
@@ -80,7 +88,7 @@ namespace ADC
 	{
 		vector<shared_ptr<Monster>> monstersToRemove;
 
-		/*for (auto m : _monsters)
+		for (auto m : _monsters)
 		{
 			if (!m->update())
 			{
@@ -91,7 +99,7 @@ namespace ADC
 		for (auto m : monstersToRemove)
 		{
 			_monsters.remove(m);
-		}*/
+		}
 	}
 
 	void World::entityEnterCell(Entity& entity)
@@ -120,6 +128,14 @@ namespace ADC
 		}
 
 		return _map[x + y * _width] != Cell::ConcreteWall;
+	}
+
+	void World::spawnMonster()
+	{
+		Position pos = RandomGenerator::RandomPosition(_width, _height);
+		if (getCell(pos) == Cell::FreeCell) {
+			_monsters.push_back(make_shared<Monster>(_SharedThis, pos, 5));
+		}
 	}
 
 	void World::removeMonsterByPosition(const Position& position)

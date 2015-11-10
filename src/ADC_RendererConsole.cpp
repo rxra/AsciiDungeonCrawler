@@ -12,7 +12,7 @@ namespace ADC
 	void SetFontProperties(int fontX, int fontY, wchar_t *fontName);
 
 	RendererConsole::RendererConsole(const shared_ptr<World>& world)
-		: _world(world), _width(0), _height(0), _outputHandle(NULL), _inputHandle(NULL)
+		: _referenceX(0), _referenceY(0), _world(world), _width(0), _height(0), _outputHandle(NULL), _inputHandle(NULL)
 	{
 	}
 
@@ -25,6 +25,16 @@ namespace ADC
 		// initiliaze renderer width/height
 		_width = (width == 0) ? _world->getWidth() : width;
 		_height = (height == 0) ? _world->getHeight() : height;
+
+		if (_world->getWidth() < _width)
+		{
+			_width = _world->getWidth();
+		}
+
+		if (_world->getHeight() < _height)
+		{
+			_height = _world->getHeight();
+		}
 
 		// add a line for the GUI
 		_height++;
@@ -224,13 +234,45 @@ namespace ADC
 
 	}
 
+	void RendererConsole::updateReference()
+	{
+		int rx = _world->getPlayer()->getPosition().x - (static_cast<int>(_width / 2.f));
+		int ry = _world->getPlayer()->getPosition().y - (static_cast<int>((_height-1) / 2.f));
+
+		if (rx < 0)
+		{
+			_referenceX = 0;
+		}
+		else if (static_cast<size_t>(rx) > (_world->getWidth() - _width))
+		{
+			_referenceX = _world->getWidth() - _width;
+		}
+		else
+		{
+			_referenceX = rx;
+		}
+
+		if (ry < 0)
+		{
+			_referenceY = 0;
+		}
+		else if (static_cast<size_t>(ry) > (_world->getHeight() - (_height-1)))
+		{
+			_referenceY = _world->getHeight() - (_height-1);
+		}
+		else
+		{
+			_referenceY = ry;
+		}
+	}
+
 	void RendererConsole::_updateFromWorld()
 	{
 		for (size_t x = 0; x < _width; x++)
 		{
 			for (size_t y = 1; y < _height; y++)
 			{
-				_map[x + y * _width].Char.AsciiChar = static_cast<char>(_world->getCell(x, y-1));
+				_map[x + y * _width].Char.AsciiChar = static_cast<char>(_world->getCell(x + _referenceX, y -1 + _referenceY));
 				_map[x + y * _width].Attributes =
 					BACKGROUND_BLUE |
 					BACKGROUND_GREEN |
