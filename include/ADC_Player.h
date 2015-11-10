@@ -28,6 +28,7 @@ namespace ADC
 		int getKeyBronze() const;
 		int getKeyIron() const;
 		int getKeyAll() const;
+		bool win() const;
 
 	private:
 
@@ -41,6 +42,7 @@ namespace ADC
 		int _keyBronze;
 		int _keyIron;
 		int _keyAll;
+		bool _win;
 
 	};
 
@@ -55,7 +57,8 @@ inline ADC::Player::Player(std::shared_ptr<World>& world, World::Position& start
 	_swords(0),
 	_keyBronze(0),
 	_keyIron(0),
-	_keyAll(0)
+	_keyAll(0),
+	_win(false)
 {
 }
 
@@ -92,6 +95,11 @@ inline int ADC::Player::getKeyIron() const
 inline int ADC::Player::getKeyAll() const
 {
 	return _keyAll;
+}
+
+inline bool ADC::Player::win() const
+{
+	return _win;
 }
 
 #endif // ADC_PLAYER_H

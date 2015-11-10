@@ -22,9 +22,10 @@ namespace ADC
 		bool initialize(size_t width = 0, size_t height = 0);
 
 		bool updateInput();
-		void render();
+		void render(bool checkWorld);
 		void updateGUI(const Player& player);
 		void playerDead();
+		void playerWin();
 		void updateReference();
 
 	private:

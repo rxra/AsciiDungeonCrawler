@@ -84,41 +84,58 @@ int main(int argc, const char** argv)
 	});
 
 	renderer->addOnRestartListener([&world,&map]() {
-		if (world->getPlayer()->getLives() <= 0)
+		if (world->getPlayer()->getLives() <= 0 || world->getPlayer()->win())
 		{
 			world->reset(map, 3);
 		}
 	});
 
 	renderer->addOnMoveDownListener([&world]() {
-		world->getPlayer()->moveDown();
+		if (world->getPlayer()->getLives() > 0 && !world->getPlayer()->win())
+		{
+			world->getPlayer()->moveDown();
+		}
 	});
 
 	renderer->addOnMoveUpListener([&world]() {
-		world->getPlayer()->moveUp();
+		if (world->getPlayer()->getLives() > 0 && !world->getPlayer()->win())
+		{
+			world->getPlayer()->moveUp();
+		}
 	});
 
 	renderer->addOnMoveLeftListener([&world]() {
-		world->getPlayer()->moveLeft();
+		if (world->getPlayer()->getLives() > 0 && !world->getPlayer()->win())
+		{
+			world->getPlayer()->moveLeft();
+		}
 	});
 
 	renderer->addOnMoveRightListener([&world]() {
-		world->getPlayer()->moveRight();
+		if (world->getPlayer()->getLives() > 0 && !world->getPlayer()->win())
+		{
+			world->getPlayer()->moveRight();
+		}
 	});
 
 	/////////////////////////////////////////////////////////////////////////////
 
+	bool input = false;
 	float lastMonstersSpawntime = GetCurrentGameTime();
 
 	while (loop)
 	{
 		float frameTime = GetCurrentGameTime();
 
-		 renderer->updateInput();
+		input = renderer->updateInput();
+
+		if (world->getPlayer()->getLives() > 0 && !world->getPlayer()->win())
+		{
+			world->update();
+		}
 
 		while (!FPSLimit(frameTime));
 
-		world->update();
 		if ((GetCurrentGameTime() - lastMonstersSpawntime) >= kMonstersSpawnFrequency)
 		{
 			lastMonstersSpawntime = GetCurrentGameTime();
@@ -129,16 +146,21 @@ int main(int argc, const char** argv)
 		{
 			renderer->updateReference();
 			renderer->updateGUI(*world->getPlayer());
+		}
+		
+		if (input || world->hasBeenUpdated(false))
+		{
 			if (world->getPlayer()->getLives() == 0)
 			{
 				renderer->playerDead();
 			}
-			renderer->render();
-		}
-		else if (world->hasBeenUpdated(false))
-		{
+			else if (world->getPlayer()->win())
+			{
+				renderer->playerWin();
+
+			}
 			renderer->updateReference();
-			renderer->render();
+			renderer->render(world->getPlayer()->getLives() > 0 && !world->getPlayer()->win());
 		} 
 	}
 

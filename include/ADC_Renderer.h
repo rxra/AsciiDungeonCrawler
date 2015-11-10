@@ -27,13 +27,15 @@ namespace ADC
 
 		virtual bool updateInput() = 0;
 
-		virtual void render() = 0;
+		virtual void render(bool checkWorld) = 0;
 
 		virtual void updateReference() = 0;
 
 		virtual void updateGUI(const Player& player) = 0;
 
 		virtual void playerDead() = 0;
+
+		virtual void playerWin() = 0;
 
 		void addOnQuitListener(OnKeyListener onQuit);
 		void addOnRestartListener(OnKeyListener onRestart);

@@ -132,10 +132,10 @@ namespace ADC
 
 	void World::spawnMonster()
 	{
-		Position pos = RandomGenerator::RandomPosition(_width, _height);
+		/*Position pos = RandomGenerator::RandomPosition(_width, _height);
 		if (getCell(pos) == Cell::FreeCell) {
 			_monsters.push_back(make_shared<Monster>(_SharedThis, pos, 5));
-		}
+		}*/
 	}
 
 	void World::removeMonsterByPosition(const Position& position)

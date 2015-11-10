@@ -179,9 +179,9 @@ namespace ADC
 		return false;
 	}
 
-	void RendererConsole::render()
+	void RendererConsole::render(bool checkWorld)
 	{
-		if (_world->hasBeenUpdated(true)) {
+		if (checkWorld && _world->hasBeenUpdated(true)) {
 			_updateFromWorld();
 		}
 
@@ -228,6 +228,21 @@ namespace ADC
 				_map[x + y * _width].Char.AsciiChar = ' ';
 				_map[x + y * _width].Attributes =
 					BACKGROUND_RED |
+					BACKGROUND_INTENSITY;
+			}
+		}
+
+	}
+
+	void RendererConsole::playerWin()
+	{
+		for (size_t x = 0; x < _width; x++)
+		{
+			for (size_t y = 1; y < _height; y++)
+			{
+				_map[x + y * _width].Char.AsciiChar = ' ';
+				_map[x + y * _width].Attributes =
+					BACKGROUND_BLUE |
 					BACKGROUND_INTENSITY;
 			}
 		}

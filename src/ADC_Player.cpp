@@ -14,6 +14,7 @@ namespace ADC
 		_keyBronze = 0;
 		_keyIron = 0;
 		_keyAll = 0;
+		_win = false;
 
 		World::Position oldPosition = _currentPosition;
 		_currentPosition = _startPosition;
@@ -51,7 +52,7 @@ namespace ADC
 		switch (cell)
 		{
 		case World::Cell::Exit:
-			// TODO manage exit reached
+			_win = true;
 			return false;
 			break;
 
